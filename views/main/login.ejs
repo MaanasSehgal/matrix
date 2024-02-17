@@ -1,0 +1,58 @@
+<% layout("/layouts/boilerplate") -%>
+<div class="row mt-3">
+    <h1 class="col-6 offset-3">Login</h1>
+    <div class="col-6 offset-3">
+        <form action="/login" method="POST" class="needs-validation" novalidate>
+            <div class="mb-3">
+                <label for="username" class="form-label">Username</label>
+                <input name="username" id="username" type="text" class="form-control" required />
+            </div>
+
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input name="password" id="password" type="password" class="form-control" required />
+            </div>
+        </form>
+
+        <style>
+            button {
+                border: solid 2px #444;
+                font-size: 20px;
+                padding: 20px 40px 20px 70px;
+                background: #dd6e2e;
+                background-image: url("mm.png");
+                background-size: 40px;
+                background-repeat: no-repeat;
+                background-position: 20px;
+                font-weight: bold;
+                color: #fff;
+                box-shadow: inset 2px 2px 0 #fff, 0 8px 10px -4px rgba(0, 0, 0, 0.4);
+                cursor: pointer;
+                transition: all 0.4s ease;
+            }
+        </style>
+        <button id="connect-button">Connect Metamask</button>
+        <script>
+            document.getElementById("connect-button").addEventListener("click", (event) => {
+                let account;
+                let button = event.target;
+                ethereum.request({method: "eth_requestAccounts"}).then((accounts) => {
+                    account = accounts[0];
+                    console.log(account);
+                    button.textContent = account;
+
+                    ethereum.request({method: "eth_getBalance", params: [account, "latest"]}).then((result) => {
+                        console.log(result);
+                        let wei = parseInt(result, 16);
+                        let balance = wei / 10 ** 18;
+                        console.log(balance + " ETH");
+                    });
+                });
+            });
+        </script>
+        <br /><br />
+        <form action="/crypto">
+            <button class="btn btn-success">Login</button>
+        </form>
+    </div>
+</div>
